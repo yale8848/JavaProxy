@@ -1,16 +1,14 @@
 package ren.yale.javaproxy.javassist.btyemethod;
 
 import javassist.*;
-import ren.yale.javaproxy.jdk.UserService;
+import ren.yale.javaproxy.javassist.btyemethod.Hello.Hello;
 import ren.yale.javaproxy.jdk.UserServiceImpl;
 
 /**
  * Created by Yale on 2017/6/16.
  */
 public class Main {
-
-    public static void main(String args[]) throws Exception{
-
+    private static void user() throws  Exception{
         ClassPool classPool = new ClassPool(true);
         String className = UserServiceImpl.class.getName();
 
@@ -31,12 +29,17 @@ public class Main {
 
         // 添加方法,里面进行动态代理logic
         ctClass.addMethod(CtNewMethod
-                .make("public String getName(){ return \"before \" + real.getName() + \" after\";}",
+                .make("public String getName(int id){ return \"before \" + real.getName(1) + \" after\";}",
                         ctClass));
 
-        Class<UserService> testClass = ctClass.toClass();
-        UserService test = testClass.newInstance();
+        Class<UserServiceImpl> testClass = ctClass.toClass();
+        UserServiceImpl test = testClass.newInstance();
         test.getName(1);
+    }
+
+    public static void main(String args[]) throws Exception{
+
+        user();
 
 
     }
